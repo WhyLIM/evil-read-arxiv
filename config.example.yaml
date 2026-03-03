@@ -1,0 +1,61 @@
+# evil-read-arxiv 配置文件示例
+# 复制此文件为 config.yaml 并修改为你自己的路径
+
+# Obsidian Vault 路径（必填）
+vault_path: "/path/to/your/obsidian/vault"
+
+# Papers 目录相对于 vault 的路径（可选，默认为 20_Research/Papers）
+papers_dir: "20_Research/Papers"
+
+# 研究兴趣配置（必填）
+research_domains:
+  # 研究领域名称可以自定义
+  "大模型":
+    # 关键词列表，用于搜索和匹配论文
+    keywords:
+      - "pre-training"
+      - "foundation model"
+      - "model architecture"
+      - "large language model"
+      - "LLM"
+      - "transformer"
+    # arXiv 分类（可选）
+    arxiv_categories:
+      - "cs.AI"
+      - "cs.LG"
+      - "cs.CL"
+    # 优先级（可选，1-10，数值越高越优先）
+    priority: 5
+
+  "多模态技术":
+    keywords:
+      - "vision-language"
+      - "multimodal"
+      - "image-text"
+      - "visual"
+      - "cross-modal"
+    arxiv_categories:
+      - "cs.CV"
+      - "cs.MM"
+      - "cs.CL"
+    priority: 4
+
+  "智能体":
+    keywords:
+      - "agent"
+      - "multi-agent"
+      - "orchestration"
+      - "autonomous"
+      - "planning"
+    arxiv_categories:
+      - "cs.AI"
+      - "cs.MA"
+      - "cs.RO"
+    priority: 4
+
+# 排除的关键词（可选）
+excluded_keywords:
+  - "3D"
+  - "review"
+  - "workshop"
+  - "survey"
