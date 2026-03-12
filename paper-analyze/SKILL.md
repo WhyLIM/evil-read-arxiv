@@ -1,8 +1,38 @@
 ---
 name: paper-analyze
-description: 深度分析单篇论文，生成详细笔记和评估，图文并茂
+description: 深度分析单篇论文，生成详细笔记和评估，图文并茂 / Deep analyze a single paper, generate detailed notes with images
 allowed-tools: Read, Write, Bash, WebFetch
 ---
+
+# Language Setting / 语言设置
+
+This skill supports both Chinese and English reports. The language is determined by the `language` field in your config file:
+
+- **Chinese (default)**: Set `language: "zh"` in config
+- **English**: Set `language: "en"` in config
+
+The config file should be located at: `$OBSIDIAN_VAULT_PATH/99_System/Config/research_interests.yaml`
+
+## Language Detection
+
+At the start of execution, read the config file to detect the language setting:
+
+```bash
+# Read language from config
+LANGUAGE=$(grep -E "^\s*language:" "$OBSIDIAN_VAULT_PATH/99_System/Config/research_interests.yaml" | awk '{print $2}' | tr -d '"')
+
+# Default to Chinese if not set
+if [ -z "$LANGUAGE" ]; then
+    LANGUAGE="zh"
+fi
+```
+
+Then use this language setting throughout the workflow:
+- When generating notes, pass `--language $LANGUAGE` to scripts
+- Generate content in the appropriate language
+
+---
+
 You are the Paper Analyzer for OrbitOS.
 
 # 目标
@@ -210,7 +240,7 @@ INDEX_PATH="${IMAGES_DIR}/index.md"
 
 ```bash
 # 调用外部脚本生成笔记
-python "scripts/generate_note.py" --paper-id "[PAPER_ID]" --title "[论文标题]" --authors "[作者]" --domain "[领域]"
+python "scripts/generate_note.py" --paper-id "[PAPER_ID]" --title "[论文标题]" --authors "[作者]" --domain "[领域]" --language "$LANGUAGE"
 ```
 
 ### 4.3 使用obsidian-markdown skill生成最终笔记
@@ -230,7 +260,7 @@ cat "$GRAPH_PATH" 2>/dev/null || echo "{}"
 
 ```bash
 # 调用外部脚本更新知识图谱
-python "scripts/update_graph.py" --paper-id "[PAPER_ID]" --title "[论文标题]" --domain "[领域]" --score [评分]
+python "scripts/update_graph.py" --paper-id "[PAPER_ID]" --title "[论文标题]" --domain "[领域]" --score [评分] --language "$LANGUAGE"
 ```
 
 ## 步骤4：生成综合论文笔记
@@ -503,13 +533,13 @@ cat /tmp/paper_analysis/{1-introduction,2-joint-optimization,3-agent-swarm,5-eva
 #### 步骤4：生成笔记
 ```bash
 # 使用外部脚本生成笔记
-python "scripts/generate_note.py" --paper-id "$PAPER_ID" --title "$TITLE" --authors "$AUTHORS" --domain "$DOMAIN"
+python "scripts/generate_note.py" --paper-id "$PAPER_ID" --title "$TITLE" --authors "$AUTHORS" --domain "$DOMAIN" --language "$LANGUAGE"
 ```
 
 #### 步骤5：更新图谱
 ```bash
 # 使用外部脚本更新知识图谱
-python "scripts/update_graph.py" --paper-id "$PAPER_ID" --title "$TITLE" --domain "$DOMAIN" --score 8.8
+python "scripts/update_graph.py" --paper-id "$PAPER_ID" --title "$TITLE" --domain "$DOMAIN" --score 8.8 --language "$LANGUAGE"
 ```
 
 #### 步骤6：使用obsidian-markdown skill修复格式
@@ -934,7 +964,7 @@ AUTHORS="${3:-Kimi Team}"
 DOMAIN="${4:-其他}"
 
 # 执行完整流程
-python "scripts/generate_note.py" --paper-id "$PAPER_ID" --title "$TITLE" --authors "$AUTHORS" --domain "$DOMAIN" || \
+python "scripts/generate_note.py" --paper-id "$PAPER_ID" --title "$TITLE" --authors "$AUTHORS" --domain "$DOMAIN" --language "$LANGUAGE" --language "$LANGUAGE" || \
     echo "笔记生成脚本执行失败"
 
 # 提取图片
@@ -975,13 +1005,13 @@ cat /tmp/paper_analysis/{1-introduction,2-joint-optimization,3-agent-swarm,5-eva
 #### 步骤4：生成笔记
 ```bash
 # 使用外部脚本生成笔记
-python "scripts/generate_note.py" --paper-id "$PAPER_ID" --title "$TITLE" --authors "$AUTHORS" --domain "$DOMAIN"
+python "scripts/generate_note.py" --paper-id "$PAPER_ID" --title "$TITLE" --authors "$AUTHORS" --domain "$DOMAIN" --language "$LANGUAGE"
 ```
 
 #### 步骤5：更新图谱
 ```bash
 # 使用外部脚本更新知识图谱
-python "scripts/update_graph.py" --paper-id "$PAPER_ID" --title "$TITLE" --domain "$DOMAIN" --score 8.8
+python "scripts/update_graph.py" --paper-id "$PAPER_ID" --title "$TITLE" --domain "$DOMAIN" --score 8.8 --language "$LANGUAGE"
 ```
 
 #### 步骤6：使用obsidian-markdown skill修复格式

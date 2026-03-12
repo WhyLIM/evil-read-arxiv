@@ -33,13 +33,14 @@ def main():
         stream=sys.stderr,
     )
 
-    parser = argparse.ArgumentParser(description='更新知识图谱')
-    parser.add_argument('--paper-id', type=str, required=True, help='论文 arXiv ID')
-    parser.add_argument('--title', type=str, required=True, help='论文标题')
-    parser.add_argument('--domain', type=str, required=True, help='论文领域')
-    parser.add_argument('--score', type=float, default=0.0, help='质量评分')
-    parser.add_argument('--related', type=str, nargs='*', default=[], help='相关论文ID列表')
-    parser.add_argument('--vault', type=str, default=None, help='Obsidian vault 路径')
+    parser = argparse.ArgumentParser(description='更新知识图谱 / Update knowledge graph')
+    parser.add_argument('--paper-id', type=str, required=True, help='论文 arXiv ID / Paper arXiv ID')
+    parser.add_argument('--title', type=str, required=True, help='论文标题 / Paper title')
+    parser.add_argument('--domain', type=str, required=True, help='论文领域 / Paper domain')
+    parser.add_argument('--score', type=float, default=0.0, help='质量评分 / Quality score')
+    parser.add_argument('--related', type=str, nargs='*', default=[], help='相关论文ID列表 / Related paper IDs')
+    parser.add_argument('--vault', type=str, default=None, help='Obsidian vault 路径 / Obsidian vault path')
+    parser.add_argument('--language', type=str, default='zh', choices=['zh', 'en'], help='语言 / Language: zh (中文) or en (English)')
     args = parser.parse_args()
 
     vault_root = get_vault_path(args.vault)
@@ -64,13 +65,19 @@ def main():
     except (ValueError, IndexError):
         year = datetime.now().year
 
+    # Language-aware tags
+    if args.language == "zh":
+        tags = ["论文笔记", args.domain]
+    else:
+        tags = ["paper-notes", args.domain]
+
     paper_node = {
         "id": args.paper_id,
         "title": args.title,
         "year": year,
         "domain": args.domain,
         "quality_score": args.score,
-        "tags": ["论文笔记", args.domain],
+        "tags": tags,
         "analyzed": True
     }
 
@@ -111,9 +118,14 @@ def main():
         logger.error("写入图谱失败: %s", e)
         sys.exit(1)
 
-    print(f"图谱已更新: {graph_path}")
-    print(f"节点数: {len(graph['nodes'])}")
-    print(f"边数: {len(graph['edges'])}")
+    if args.language == "zh":
+        print(f"图谱已更新: {graph_path}")
+        print(f"节点数: {len(graph['nodes'])}")
+        print(f"边数: {len(graph['edges'])}")
+    else:
+        print(f"Graph updated: {graph_path}")
+        print(f"Nodes: {len(graph['nodes'])}")
+        print(f"Edges: {len(graph['edges'])}")
 
 
 if __name__ == '__main__':

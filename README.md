@@ -2,6 +2,11 @@
 
 > 邪修的论文阅读工作流 - 自动化论文搜索、推荐、分析和整理
 
+## 语言 / Language
+
+- [中文版](README.md)
+- [English Version](README_en.md)
+
 ## 简介
 
 这是一套 Claude Code 技能（Skills）集合，用于自动化研究论文的搜索、推荐、分析和整理工作流。通过调用 arXiv 和 Semantic Scholar API，每天为你推荐高质量论文，并自动生成详细笔记和关系图谱。

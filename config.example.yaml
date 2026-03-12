@@ -1,6 +1,11 @@
 # evil-read-arxiv 配置文件示例
 # 复制此文件为 config.yaml 并修改为你自己的路径
 
+# 语言设置 (zh/en)
+# - "zh": 中文报告 (default)
+# - "en": English reports
+language: "zh"
+
 # Obsidian Vault 路径（必填）
 vault_path: "/path/to/your/obsidian/vault"
 

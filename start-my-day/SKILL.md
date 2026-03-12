@@ -1,7 +1,37 @@
 ---
 name: start-my-day
-description: 论文阅读工作流启动 - 生成今日论文推荐笔记
+description: 论文阅读工作流启动 - 生成今日论文推荐笔记 / Paper reading workflow starter - Generate daily paper recommendations
 ---
+
+# Language Setting / 语言设置
+
+This skill supports both Chinese and English reports. The language is determined by the `language` field in your config file:
+
+- **Chinese (default)**: Set `language: "zh"` in config
+- **English**: Set `language: "en"` in config
+
+The config file should be located at: `$OBSIDIAN_VAULT_PATH/99_System/Config/research_interests.yaml`
+
+## Language Detection
+
+At the start of execution, read the config file to detect the language setting:
+
+```bash
+# Read language from config
+LANGUAGE=$(grep -E "^\s*language:" "$OBSIDIAN_VAULT_PATH/99_System/Config/research_interests.yaml" | awk '{print $2}' | tr -d '"')
+
+# Default to Chinese if not set
+if [ -z "$LANGUAGE" ]; then
+    LANGUAGE="zh"
+fi
+```
+
+Then use this language setting throughout the workflow:
+- When generating notes, pass `--language $LANGUAGE` to scripts
+- Use appropriate section headers in the generated notes
+
+---
+
 You are the Daily Paper Workflow Starter for OrbitOS.
 
 # 目标

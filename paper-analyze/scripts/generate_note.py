@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Obsidian笔记生成脚本 - 正确处理frontmatter格式
+支持中英文报告生成
 """
 
 import sys
@@ -25,17 +26,20 @@ def get_vault_path(cli_vault=None):
     sys.exit(1)
 
 
-def generate_note_content(paper_id, title, authors, domain, date):
+def generate_note_content(paper_id, title, authors, domain, date, language="zh"):
     """生成笔记的 Markdown 内容"""
-    domain_tags = {
-        "大模型": ["大模型", "LLM"],
-        "多模态技术": ["多模态", "Vision-Language"],
-        "智能体": ["智能体", "Agent"],
-    }
-    tags = ["论文笔记"] + domain_tags.get(domain, [domain])
-    tags_yaml = "\n".join(f'  - {tag}' for tag in tags)
 
-    return f'''---
+    # 中文模板
+    if language == "zh":
+        domain_tags = {
+            "大模型": ["大模型", "LLM"],
+            "多模态技术": ["多模态", "Vision-Language"],
+            "智能体": ["智能体", "Agent"],
+        }
+        tags = ["论文笔记"] + domain_tags.get(domain, [domain])
+        tags_yaml = "\n".join(f'  - {tag}' for tag in tags)
+
+        return f'''---
 date: "{date}"
 paper_id: "{paper_id}"
 title: "{title}"
@@ -184,6 +188,166 @@ status: analyzed
 - [项目主页（如果有）]
 - [相关资源]
 '''
+    else:
+        # English template
+        domain_tags_en = {
+            "LLM": ["LLM", "Large Language Model"],
+            "Multimodal": ["Multimodal", "Vision-Language"],
+            "Agent": ["Agent", "Multi-Agent"],
+            "Other": ["Paper Notes"],
+        }
+        tags = ["paper-notes"] + domain_tags_en.get(domain, [domain])
+        tags_yaml = "\n".join(f'  - {tag}' for tag in tags)
+
+        return f'''---
+date: "{date}"
+paper_id: "{paper_id}"
+title: "{title}"
+authors: "{authors}"
+domain: "{domain}"
+tags:
+{tags_yaml}
+quality_score: "[SCORE]/10"
+related_papers: []
+created: "{date}"
+updated: "{date}"
+status: analyzed
+---
+
+# {title}
+
+## Core Information
+- **Paper ID**: {paper_id}
+- **Authors**: {authors}
+- **Institution**: [Infer from authors or check paper]
+- **Publication Date**: {date}
+- **Conference/Journal**: [Infer from categories]
+- **Links**: [arXiv](https://arxiv.org/abs/{paper_id}) | [PDF](https://arxiv.org/pdf/{paper_id})
+- **Citations**: [If available]
+
+## Research Problem
+[Problem description and explanation]
+
+## Method Overview
+
+### Core Method
+
+1. [Method 1]
+   - [Detailed description]
+   - [Key steps]
+   - [Innovation points]
+
+### Method Architecture
+[Architecture description and image references]
+
+### Key Innovations
+
+1. [Innovation 1] - [Why important]
+2. [Innovation 2] - [Why important]
+3. [Innovation 3] - [Why important]
+
+## Experimental Results
+
+### Datasets
+- [Dataset 1]: [Scale, characteristics]
+- [Dataset 2]: [Scale, characteristics]
+
+### Experimental Settings
+- **Baseline Methods**: [List comparison methods]
+- **Evaluation Metrics**: [List metrics]
+- **Experimental Environment**: [Hardware, hyperparameters]
+
+### Main Results
+[Experimental results table and key findings]
+
+## Deep Analysis
+
+### Research Value
+- **Theoretical Contribution**: [Theoretical contribution]
+- **Practical Applications**: [Practical application value]
+- **Field Impact**: [Potential impact on research field]
+
+### Advantages
+- [Advantage 1]
+- [Advantage 2]
+- [Advantage 3]
+
+### Limitations
+- [Limitation 1]
+- [Limitation 2]
+- [Limitation 3]
+
+### Applicable Scenarios
+- [Scenario 1]
+- [Scenario 2]
+
+## Comparison with Related Papers
+
+### [[Related Paper 1]] - [Relationship]
+- **Difference**: [How this method differs]
+- **Improvement**: [Improvements compared to others]
+- **Performance Comparison**: [If available]
+
+### [[Related Paper 2]] - [Relationship]
+[Similar format]
+
+### [[Related Paper 3]] - [Relationship]
+[Similar format]
+
+## Technical Track Positioning
+
+This paper belongs to [technical track], focusing on [specific sub-direction].
+
+## Future Work Suggestions
+
+1. [Author's suggestion 1]
+2. [Author's suggestion 2]
+3. [Extension suggestions based on analysis]
+
+## My Comprehensive Evaluation
+
+### Value Scoring
+- **Overall Score**: [X.X/10]
+- **Breakdown**:
+  - Innovation: [X/10]
+  - Technical Quality: [X/10]
+  - Experiment Thoroughness: [X/10]
+  - Writing Quality: [X/10]
+  - Practicality: [X/10]
+
+### Highlights
+- [Highlight 1]
+- [Highlight 2]
+- [Highlight 3]
+
+### Key Points to Focus On
+- [Aspects that need special attention]
+
+### Learnings
+- [Techniques to learn from]
+- [Methods to apply]
+- [Inspiring ideas]
+
+### Critical Thinking
+- [Potential issues]
+- [Areas for improvement]
+- [Points of contention]
+
+## My Notes
+
+[Content to be added manually after reading]
+
+## Related Papers
+- [[Related Paper 1]] - [Relationship]
+- [[Related Paper 2]] - [Relationship]
+- [[Related Paper 3]] - [Relationship]
+
+## External Resources
+- [Paper links]
+- [Code links (if available)]
+- [Project homepage (if available)]
+- [Related resources]
+'''
 
 
 def main():
@@ -194,12 +358,13 @@ def main():
         stream=sys.stderr,
     )
 
-    parser = argparse.ArgumentParser(description='生成论文分析笔记')
-    parser.add_argument('--paper-id', type=str, default='[PAPER_ID]', help='论文 arXiv ID')
-    parser.add_argument('--title', type=str, default='[论文标题]', help='论文标题')
-    parser.add_argument('--authors', type=str, default='[Authors]', help='论文作者')
-    parser.add_argument('--domain', type=str, default='其他', help='论文领域')
-    parser.add_argument('--vault', type=str, default=None, help='Obsidian vault 路径')
+    parser = argparse.ArgumentParser(description='生成论文分析笔记 / Generate paper analysis notes')
+    parser.add_argument('--paper-id', type=str, default='[PAPER_ID]', help='论文 arXiv ID / Paper arXiv ID')
+    parser.add_argument('--title', type=str, default='[论文标题]', help='论文标题 / Paper title')
+    parser.add_argument('--authors', type=str, default='[Authors]', help='论文作者 / Paper authors')
+    parser.add_argument('--domain', type=str, default='其他', help='论文领域 / Paper domain')
+    parser.add_argument('--vault', type=str, default=None, help='Obsidian vault 路径 / Obsidian vault path')
+    parser.add_argument('--language', type=str, default='zh', choices=['zh', 'en'], help='语言 / Language: zh (中文) or en (English)')
     args = parser.parse_args()
 
     vault_root = get_vault_path(args.vault)
@@ -213,13 +378,13 @@ def main():
     # 校验域名，防止路径穿越
     domain = args.domain.strip('/\\').replace('..', '')
     if not domain:
-        domain = '其他'
+        domain = '其他' if args.language == 'zh' else 'Other'
 
     note_dir = os.path.join(papers_dir, domain)
     os.makedirs(note_dir, exist_ok=True)
 
     note_path = os.path.join(note_dir, f"{paper_title_safe}.md")
-    content = generate_note_content(args.paper_id, args.title, args.authors, domain, date)
+    content = generate_note_content(args.paper_id, args.title, args.authors, domain, date, args.language)
 
     try:
         with open(note_path, 'w', encoding='utf-8') as f:
@@ -228,8 +393,8 @@ def main():
         logger.error("写入笔记失败: %s", e)
         sys.exit(1)
 
-    print(f"笔记已生成: {note_path}")
-    print(f"请手动编辑笔记内容，替换占位符为实际分析结果")
+    print(f"笔记已生成: {note_path}" if args.language == 'zh' else f"Note generated: {note_path}")
+    print(f"请手动编辑笔记内容，替换占位符为实际分析结果" if args.language == 'zh' else "Please manually edit the note content, replacing placeholders with actual analysis results")
 
 
 if __name__ == '__main__':
