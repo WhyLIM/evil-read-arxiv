@@ -236,22 +236,22 @@ evil-read-arxiv/
 ├── config.example.yaml       # 配置模板（需要复制并修改）
 ├── requirements.txt          # Python 依赖
 ├── start-my-day/             # 每日推荐技能
-│   ├── skill.md              # 技能定义文件
+│   ├── SKILL.md              # 技能定义文件
 │   └── scripts/
 │       ├── search_arxiv.py   # arXiv/Semantic Scholar 搜索脚本
 │       ├── scan_existing_notes.py  # 扫描现有笔记
 │       └── link_keywords.py  # 关键词自动链接脚本
 ├── paper-analyze/            # 论文分析技能
-│   ├── skill.md
+│   ├── SKILL.md
 │   └── scripts/
 │       ├── generate_note.py  # 生成笔记模板
 │       └── update_graph.py   # 更新知识图谱
 ├── extract-paper-images/     # 图片提取技能
-│   ├── skill.md
+│   ├── SKILL.md
 │   └── scripts/
 │       └── extract_images.py # 图片提取脚本
 ├── paper-search/             # 论文搜索技能
-│   └── skill.md
+│   └── SKILL.md
 └── conf-papers/              # 顶会论文搜索推荐技能
     ├── SKILL.md              # 技能定义文件
     ├── conf-papers.yaml      # 独立配置（关键词、会议、年份）
