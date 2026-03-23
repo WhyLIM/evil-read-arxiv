@@ -342,9 +342,11 @@ tags: ["llm-generated", "daily-paper-recommend"]
 - 自动提取，无需手动操作
 
 **详细报告说明**：
-- 报告路径：`20_Research/Papers/[论文分类]/[论文标题].md`
-- 论文名称标题使用 wikilink 格式：`[[论文名字]]`，关联到详细报告
-- 在"详细报告"字段再次显示详细报告的 wikilink（可选，增强可读性）
+- 报告路径：`20_Research/Papers/[论文分类]/[note_filename].md`
+- **重要**：使用 JSON 中的 `note_filename` 字段（而非原始标题）拼接 wikilink，确保与 `generate_note.py` 创建的文件名一致
+  - 正确：`[[20_Research/Papers/大模型/Hypothesis-Conditioned_Query_Rewriting_for_Decision-Useful_Retrieval]]`
+  - 错误：`[[20_Research/Papers/大模型/Hypothesis-Conditioned Query Rewriting for Decision-Useful Retrieval]]`
+- 在"详细报告"字段显示 wikilink：`- **详细报告**：[[20_Research/Papers/[domain]/[note_filename]]]`
 - 详细报告由 `paper-analyze` 自动生成，包含完整的论文分析
 
 ## 步骤5：自动链接关键词（可选）
