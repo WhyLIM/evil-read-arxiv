@@ -171,6 +171,21 @@ class SearchBiomedPapersTests(unittest.TestCase):
         cleaned = sbp.clean_html_text(text)
         self.assertEqual(cleaned, "Sialic acid cis-ligand and IFN-α with CD4⁺ cells")
 
+    def test_parse_keyword_overrides_accepts_commas_and_repeated_flags(self):
+        keywords = sbp.parse_keyword_overrides([
+            "single-cell lung cancer, tumor microenvironment",
+            "immune checkpoint inhibitor",
+        ])
+
+        self.assertEqual(
+            keywords,
+            [
+                "single-cell lung cancer",
+                "tumor microenvironment",
+                "immune checkpoint inhibitor",
+            ],
+        )
+
     def test_build_markdown_note_shows_epub_and_issue_dates(self):
         papers = [
             {

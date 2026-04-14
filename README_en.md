@@ -387,8 +387,11 @@ Edit `biomed-papers/biomed-papers.yaml` to define:
 ```bash
 python biomed-papers/scripts/search_biomed_papers.py \
   --config biomed-papers/biomed-papers.yaml \
+  --keywords "single-cell lung cancer,tumor microenvironment" \
   --vault "$OBSIDIAN_VAULT_PATH"
 ```
+
+`--keywords` overrides the YAML keywords for the current run without modifying the config file, which is useful when invoking the skill through Claude Code or Codex.
 
 ## Contributing
 

@@ -28,6 +28,12 @@ Read `biomed-papers.yaml` from this skill directory. The config defines:
 - `top_n`
 - `article_types`
 
+If the user provides a specific topic in their request, pass it with `--keywords` instead of editing `biomed-papers.yaml`. Use comma-separated values for related terms, for example:
+
+```bash
+--keywords "single-cell lung cancer,tumor microenvironment"
+```
+
 ## Step 2: Search biomedical literature
 
 Run:
@@ -36,6 +42,7 @@ Run:
 cd "$SKILL_DIR"
 python scripts/search_biomed_papers.py \
   --config "$SKILL_DIR/biomed-papers.yaml" \
+  --keywords "cancer immunotherapy,tumor microenvironment" \
   --output biomed_papers_filtered.json
 ```
 

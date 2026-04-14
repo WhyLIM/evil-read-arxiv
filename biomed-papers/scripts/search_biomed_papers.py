@@ -52,6 +52,16 @@ def load_config(config_path: str) -> Dict:
     return config
 
 
+def parse_keyword_overrides(values: Optional[List[str]]) -> List[str]:
+    keywords: List[str] = []
+    for value in values or []:
+        for part in value.split(","):
+            keyword = normalize_text(part)
+            if keyword:
+                keywords.append(keyword)
+    return keywords
+
+
 def normalize_text(text: Optional[str]) -> str:
     if text is None:
         return ""
@@ -559,6 +569,12 @@ def main() -> int:
     parser.add_argument("--vault", type=str, default=None, help="Obsidian vault path")
     parser.add_argument("--output", type=str, default="biomed_papers_filtered.json", help="Output JSON path")
     parser.add_argument("--target-date", type=str, default=None, help="Target date in YYYY-MM-DD format")
+    parser.add_argument(
+        "--keywords",
+        action="append",
+        default=None,
+        help="Override config keywords. Accepts comma-separated values and may be repeated.",
+    )
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -569,6 +585,9 @@ def main() -> int:
     )
 
     config = load_config(args.config)
+    keyword_overrides = parse_keyword_overrides(args.keywords)
+    if keyword_overrides:
+        config["keywords"] = keyword_overrides
     try:
         vault = get_vault_path(config, args.vault)
     except ValueError as exc:

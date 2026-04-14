@@ -406,5 +406,8 @@ cp -r evil-read-arxiv/biomed-papers ~/.claude/skills/
 ```bash
 python biomed-papers/scripts/search_biomed_papers.py \
   --config biomed-papers/biomed-papers.yaml \
+  --keywords "single-cell lung cancer,tumor microenvironment" \
   --vault "$OBSIDIAN_VAULT_PATH"
 ```
+
+`--keywords` 只覆盖当前这次运行的关键词，不会改写 YAML 配置文件，适合通过 Claude Code 或 Codex 根据用户输入直接调用。
