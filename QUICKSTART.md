@@ -58,7 +58,7 @@ Copy-Item config.yaml "$env:OBSIDIAN_VAULT_PATH\99_System\Config\research_intere
 
 ### 2.4 将技能安装到 Claude Code
 
-将 evil-read-arxiv 目录中的四个技能文件夹复制到你的 Claude Code skills 目录：
+将 evil-read-arxiv 目录中的技能文件夹复制到你的 Claude Code skills 目录：
 
 ```bash
 # macOS/Linux
@@ -66,12 +66,14 @@ cp -r evil-read-arxiv/start-my-day ~/.claude/skills/
 cp -r evil-read-arxiv/paper-analyze ~/.claude/skills/
 cp -r evil-read-arxiv/extract-paper-images ~/.claude/skills/
 cp -r evil-read-arxiv/paper-search ~/.claude/skills/
+cp -r evil-read-arxiv/biomed-papers ~/.claude/skills/
 
 # Windows PowerShell
 Copy-Item -Recurse evil-read-arxiv\start-my-day $env:USERPROFILE\.claude\skills\
 Copy-Item -Recurse evil-read-arxiv\paper-analyze $env:USERPROFILE\.claude\skills\
 Copy-Item -Recurse evil-read-arxiv\extract-paper-images $env:USERPROFILE\.claude\skills\
 Copy-Item -Recurse evil-read-arxiv\paper-search $env:USERPROFILE\.claude\skills\
+Copy-Item -Recurse evil-read-arxiv\biomed-papers $env:USERPROFILE\.claude\skills\
 ```
 
 ## 第三步：创建 Obsidian 目录结构
@@ -116,6 +118,14 @@ start my day
 
 ```
 paper-analyze 2602.12345
+```
+
+### 4. 搜索生物医学论文
+
+在 Claude Code 中输入：
+
+```
+biomed-papers cancer immunotherapy
 ```
 
 ## 常用 arXiv 分类

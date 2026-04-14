@@ -1,0 +1,15 @@
+language: "en"
+vault_path: "/path/to/your/obsidian-vault"
+lookback_days: 90
+top_n: 10
+max_results: 50
+keywords:
+  - "cancer immunotherapy"
+  - "tumor microenvironment"
+excluded_keywords:
+  - "protocol"
+  - "editorial"
+article_types:
+  - "clinical trial"
+  - "review"
+  - "journal article"

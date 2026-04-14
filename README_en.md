@@ -45,6 +45,12 @@ This is a collection of Claude Code Skills for automating research paper search,
 - Support searching by title, author, keywords, domain
 - Sort by relevance score
 
+### 5. biomed-papers - Biomedical Literature Search
+- Search biomedical literature from PubMed
+- Enrich metadata and open-access status via Europe PMC
+- Generate a daily biomedical recommendation note for Obsidian
+- Keep a lightweight, independent workflow alongside the existing computer science skills
+
 ## Installation
 
 ### Prerequisites
@@ -65,12 +71,14 @@ This is a collection of Claude Code Skills for automating research paper search,
    Copy-Item -Recurse evil-read-arxiv\paper-analyze $env:USERPROFILE\.claude\skills\
    Copy-Item -Recurse evil-read-arxiv\extract-paper-images $env:USERPROFILE\.claude\skills\
    Copy-Item -Recurse evil-read-arxiv\paper-search $env:USERPROFILE\.claude\skills\
+   Copy-Item -Recurse evil-read-arxiv\biomed-papers $env:USERPROFILE\.claude\skills\
 
    # macOS/Linux
    cp -r evil-read-arxiv/start-my-day ~/.claude/skills/
    cp -r evil-read-arxiv/paper-analyze ~/.claude/skills/
    cp -r evil-read-arxiv/extract-paper-images ~/.claude/skills/
    cp -r evil-read-arxiv/paper-search ~/.claude/skills/
+   cp -r evil-read-arxiv/biomed-papers ~/.claude/skills/
    ```
 
 2. Configure environment variables and paths (see "Configuration" below)
@@ -240,8 +248,13 @@ evil-read-arxiv/
 │   ├── SKILL.md
 │   └── scripts/
 │       └── extract_images.py # Image extraction script
-└── paper-search/             # Paper search skill
-    └── SKILL.md
+├── paper-search/             # Paper search skill
+│   └── SKILL.md
+└── biomed-papers/            # Biomedical literature search skill
+    ├── SKILL.md
+    ├── biomed-papers.yaml
+    └── scripts/
+        └── search_biomed_papers.py
 ```
 
 ## Scoring Mechanism
@@ -337,6 +350,44 @@ User inputs "start my day"
     8. Generate daily recommendation notes
     9. Generate detailed analysis for top 3
     10. Auto-link keywords
+```
+
+## Biomedical Literature Search
+
+This repository also includes a lightweight parallel skill for biomedical users:
+
+- `biomed-papers` - Search biomedical literature with PubMed and Europe PMC
+- Uses PubMed as the primary search source
+- Uses Europe PMC to enrich abstracts, PMCID, DOI, and open access hints
+- Generates `biomed_papers_filtered.json`
+- Generates `10_Daily/YYYY-MM-DD-biomed-papers.md`
+
+### Install the biomedical skill
+
+```bash
+# Windows PowerShell
+Copy-Item -Recurse evil-read-arxiv\biomed-papers $env:USERPROFILE\.claude\skills\
+
+# macOS/Linux
+cp -r evil-read-arxiv/biomed-papers ~/.claude/skills/
+```
+
+### Biomedical config
+
+Edit `biomed-papers/biomed-papers.yaml` to define:
+
+- `keywords`
+- `excluded_keywords`
+- `lookback_days`
+- `top_n`
+- `article_types`
+
+### Biomedical usage
+
+```bash
+python biomed-papers/scripts/search_biomed_papers.py \
+  --config biomed-papers/biomed-papers.yaml \
+  --vault "$OBSIDIAN_VAULT_PATH"
 ```
 
 ## Contributing

@@ -3,6 +3,21 @@ name: start-my-day
 description: 论文阅读工作流启动 - 生成今日论文推荐笔记 / Paper reading workflow starter - Generate daily paper recommendations
 ---
 
+# Routing Preflight / 路由预检查
+
+Before running this workflow, decide whether the user's request is a general/arXiv-style paper discovery task or a biomedical literature search task.
+
+Use this skill when the request is about:
+
+- arXiv paper recommendations
+- computer science or AI topics such as `cs.AI`, `cs.LG`, `cs.CL`, `cs.CV`, `NLP`, computer vision, robotics, or multi-agent systems
+- general "start my day" paper reading without a biomedical source requirement
+- daily paper recommendations that should follow the existing arXiv/Semantic Scholar workflow
+
+Do not use this skill for biomedical literature search. If the user mentions biomedical intent or sources such as PubMed, Europe PMC, cancer, immunology, clinical studies, disease, genes, proteins, drugs, single-cell biology, or medical research, route the request to the `biomed-papers` skill instead.
+
+If the request is mixed, ask one concise clarification question before running either workflow.
+
 # Language Setting / 语言设置
 
 This skill supports both Chinese and English reports. The language is determined by the `language` field in your config file:

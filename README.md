@@ -59,6 +59,12 @@
 - 两阶段过滤：标题关键词轻量筛选 → S2 补充 → 三维评分（相关性 40% + 热门度 40% + 质量 20%）
 - 前三篇论文自动生成详细分析（需有 arXiv ID）
 
+### 6. biomed-papers - 生物医学文献检索
+- 从 PubMed 搜索生物医学论文
+- 通过 Europe PMC 补充摘要、PMCID 和开放获取状态
+- 为 Obsidian 生成独立的生物医学推荐笔记
+- 以轻量并列技能的方式补充现有计算机领域工作流
+
 ## 安装
 
 ### 前置要求
@@ -79,12 +85,14 @@
    Copy-Item -Recurse evil-read-arxiv\paper-analyze $env:USERPROFILE\.claude\skills\
    Copy-Item -Recurse evil-read-arxiv\extract-paper-images $env:USERPROFILE\.claude\skills\
    Copy-Item -Recurse evil-read-arxiv\paper-search $env:USERPROFILE\.claude\skills\
+   Copy-Item -Recurse evil-read-arxiv\biomed-papers $env:USERPROFILE\.claude\skills\
 
    # macOS/Linux
    cp -r evil-read-arxiv/start-my-day ~/.claude/skills/
    cp -r evil-read-arxiv/paper-analyze ~/.claude/skills/
    cp -r evil-read-arxiv/extract-paper-images ~/.claude/skills/
    cp -r evil-read-arxiv/paper-search ~/.claude/skills/
+   cp -r evil-read-arxiv/biomed-papers ~/.claude/skills/
    ```
 
 2. 配置环境变量和路径（见下文"配置"部分）
@@ -372,3 +380,31 @@ MIT License
 - [Semantic Scholar](https://www.semanticscholar.org/) - AI 驱动的学术研究平台
 - [Claude Code](https://claude.ai/claude-code) - AI 辅助的代码和写作工具
 - [Obsidian](https://obsidian.md/) - 强大的知识管理工具
+
+## Biomedical Literature Search
+
+This repository now also includes a lightweight parallel biomedical skill:
+
+- `biomed-papers` - search biomedical literature with PubMed and Europe PMC
+- primary retrieval from PubMed
+- metadata enrichment from Europe PMC
+- writes `biomed_papers_filtered.json`
+- writes `10_Daily/YYYY-MM-DD-biomed-papers.md`
+
+### Install
+
+```bash
+# Windows PowerShell
+Copy-Item -Recurse evil-read-arxiv\biomed-papers $env:USERPROFILE\.claude\skills\
+
+# macOS/Linux
+cp -r evil-read-arxiv/biomed-papers ~/.claude/skills/
+```
+
+### Usage
+
+```bash
+python biomed-papers/scripts/search_biomed_papers.py \
+  --config biomed-papers/biomed-papers.yaml \
+  --vault "$OBSIDIAN_VAULT_PATH"
+```
