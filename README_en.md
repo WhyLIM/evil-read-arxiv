@@ -438,8 +438,6 @@ Welcome to submit Issues and Pull Requests!
 
 If you find this project helpful, please give a Star ⭐️!
 
-[![Star History Chart](https://api.star-history.com/svg?repos=juliye2025/evil-read-arxiv&type=Date)](https://star-history.com/#juliye2025/evil-read-arxiv&Date)
-
 ## License
 
 MIT License
